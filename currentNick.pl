@@ -23,12 +23,10 @@ use warnings;
 
 use File::ChangeNotify;
 
-
 my $username = $ENV{LOGNAME} || $ENV{USER} || getpwuid($<);
 my $filename = $username . 'conf';
 
 print $username;
-
 
 my $watcher = File::ChangeNotify->instantiate_watcher(
     directories    => ['/tmp/grooveirssi'],
@@ -36,38 +34,8 @@ my $watcher = File::ChangeNotify->instantiate_watcher(
     sleep_interval => 5,
 );
 
-if (my @events = $watcher->new_events()) {  
-    print $event->path(), ' - ', $event->type(), "\n";   
+while (my @events = $watcher->wait_for_events){
+    foreach my $event (@events) {
+        print $event->path(), ' - ', $event->type(), "\n";
+    }
 }
-
-
-while (my @events = $watcher->wait_for_events){ 
-    print $event->path(), ' - ', $event->type(), "\n";   
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
